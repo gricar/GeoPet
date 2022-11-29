@@ -1,4 +1,5 @@
 using GeoPet.Database.Context;
+using GeoPet.Repository.Contracts;
 using GeoPet.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,7 @@ public class SitterRepository : ISitterRepository
 
   public async Task<Sitter?> GetById(int id)
   {
-    return await _context.Sitters.FindAsync(id);
+    return await _context.Sitters.AsNoTracking().FirstOrDefaultAsync(s => s.Id == id);
   }
 
   public async Task Add(Sitter sitter)

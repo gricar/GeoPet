@@ -1,6 +1,6 @@
 using GeoPet.Models;
 
-namespace GeoPet.Repository;
+namespace GeoPet.Repository.Contracts;
 
 public interface ISitterRepository
 {
