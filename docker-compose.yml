@@ -3,7 +3,7 @@ services:
     container_name: sql_server_db
     image: mcr.microsoft.com/mssql/server:2019-latest
     ports:
-      - 1777:1433
+      - 1555:1433
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_USER=SA
