@@ -24,5 +24,5 @@ public class Pet
   public bool IsLost { get; set; } = false;
 
   [ForeignKey("SitterId")]
-  public Sitters Sitter { get; set; } = default!;
+  public Sitter Sitter { get; set; } = default!;
 }
