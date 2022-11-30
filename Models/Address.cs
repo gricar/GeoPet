@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GeoPet.Models;
 
@@ -22,7 +21,4 @@ public class Address
 
   [Required]
   public string Street { get; set; } = null!;
-
-  [ForeignKey("SitterId")]
-  public Sitter Sitter { get; set; } = default!;
 }

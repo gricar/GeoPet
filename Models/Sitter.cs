@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GeoPet.Models;
 
@@ -15,4 +16,9 @@ public class Sitter
 
   [Required]
   public string Password { get; set; } = default!;
+
+  [ForeignKey("AddressId")]
+  public Address Address { get; set; } = default!;
+
+  public ICollection<Pet>? Pets { get; set; }
 }

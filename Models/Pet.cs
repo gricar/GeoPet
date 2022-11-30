@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using GeoPet.Enums;
 
 namespace GeoPet.Models;
@@ -24,5 +25,6 @@ public class Pet
   public bool IsLost { get; set; } = false;
 
   [ForeignKey("SitterId")]
+  [JsonIgnore]
   public Sitter Sitter { get; set; } = default!;
 }
