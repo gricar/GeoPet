@@ -1,27 +1,26 @@
 using GeoPet.DTOs;
-using GeoPet.Models;
-using GeoPet.Repository.Contracts;
+using GeoPet.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GeoPet.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 public class SittersController : ControllerBase
 {
-  private readonly ISitterRepository _sitterRepository;
+  private readonly ISittersService _sittersService;
 
-  public SittersController(ISitterRepository sitterRepository)
+  public SittersController(ISittersService sittersService)
   {
-    _sitterRepository = sitterRepository;
+    _sittersService = sittersService;
   }
 
-  [HttpGet("{id:int}", Name = "GetById")]
-  public async Task<ActionResult<Sitter>> GetById(int id)
+  [HttpGet("{id:int}", Name = "GetSitterById")]
+  public async Task<ActionResult<SitterDTO>> GetSitterById(int id)
   {
     try
     {
-      Sitter? sitter = await _sitterRepository.GetById(id);
+      SitterDTO sitter = await _sittersService.GetById(id);
 
       if (sitter is null) return NotFound("Sitter not found");
 
@@ -36,22 +35,14 @@ public class SittersController : ControllerBase
   }
 
   [HttpPost]
-  public async Task<ActionResult<Sitter>> Create(SitterDTO sitterRequest)
+  public async Task<ActionResult<SitterDTO>> Create(SitterDTO sitter)
   {
     try
     {
       if (ModelState.IsValid)
       {
-        Sitter sitter = new()
-        {
-          Id = sitterRequest.Id,
-          Name = sitterRequest.Name,
-          Email = sitterRequest.Email,
-          Password = sitterRequest.Password
-        };
-
-        await _sitterRepository.Add(sitter);
-        return CreatedAtRoute(nameof(GetById), new { id = sitter.Id }, sitterRequest);
+        await _sittersService.Add(sitter);
+        return CreatedAtRoute(nameof(GetSitterById), new { id = sitter.Id }, sitter);
       }
 
       return BadRequest();
@@ -65,30 +56,22 @@ public class SittersController : ControllerBase
   }
 
   [HttpPut("{id:int}")]
-  public async Task<IActionResult> Update(int id, SitterDTO sitterRequest)
+  public async Task<IActionResult> Update(int id, SitterDTO sitter)
   {
     try
     {
-      if (id != sitterRequest.Id)
+      if (id != sitter.Id)
       {
         return BadRequest($"Sitter id conflict");
       }
 
-      Sitter? sitterFound = await _sitterRepository.GetById(id);
+      SitterDTO? sitterFound = await _sittersService.GetById(id);
 
       if (sitterFound is null) return NotFound("Sitter not found");
 
       if (ModelState.IsValid)
       {
-        Sitter sitter = new()
-        {
-          Id = sitterRequest.Id,
-          Name = sitterRequest.Name,
-          Email = sitterRequest.Email,
-          Password = sitterRequest.Password
-        };
-
-        await _sitterRepository.Update(sitter);
+        await _sittersService.Update(id, sitter);
         return Ok($"Sitter id {id} succesfully updated");
       }
 
@@ -107,11 +90,11 @@ public class SittersController : ControllerBase
   {
     try
     {
-      Sitter? sitter = await _sitterRepository.GetById(id);
+      SitterDTO? sitter = await _sittersService.GetById(id);
 
       if (sitter is null) return NotFound("Sitter not found");
 
-      await _sitterRepository.Delete(sitter);
+      await _sittersService.Delete(sitter);
       return Ok($"Sitter succesfully deleted");
     }
     catch (Exception err)

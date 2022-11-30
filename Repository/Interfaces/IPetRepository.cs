@@ -1,10 +1,10 @@
 using GeoPet.Models;
 
-namespace GeoPet.Repository.Contracts;
+namespace GeoPet.Repository.Interfaces;
 
 
 public interface IPetRepository
 {
   Task<Pet?> GetById(int id);
-  Task Add(Pet pet);
+  Task<int> Add(Pet pet);
 }

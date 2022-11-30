@@ -1,5 +1,5 @@
 using GeoPet.Database.Context;
-using GeoPet.Repository.Contracts;
+using GeoPet.Repository.Interfaces;
 using GeoPet.Models;
 using Microsoft.EntityFrameworkCore;
 

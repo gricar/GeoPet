@@ -1,31 +1,26 @@
 using GeoPet.DTOs;
-using GeoPet.Models;
-using GeoPet.Repository.Contracts;
+using GeoPet.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GeoPet.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 public class PetsController : ControllerBase
 {
-  private readonly IPetRepository _petRepository;
-  private readonly ISitterRepository _sitterRepository;
+  private readonly IPetsService _petsService;
 
-
-  public PetsController(IPetRepository petRepository,
-                        ISitterRepository sitterRepository)
+  public PetsController(IPetsService petsService)
   {
-    _petRepository = petRepository;
-    _sitterRepository = sitterRepository;
+    _petsService = petsService;
   }
 
-  [HttpGet("{id:int}", Name = "GetPetById")]
-  public async Task<IActionResult> GetPetById(int id)
+  [HttpGet("{id:int}", Name = "GetById")]
+  public async Task<ActionResult<PetDTO>> GetById(int id)
   {
     try
     {
-      Pet? pet = await _petRepository.GetById(id);
+      PetDTO pet = await _petsService.GetById(id);
 
       if (pet is null) return NotFound("Pet not found");
 
@@ -40,29 +35,15 @@ public class PetsController : ControllerBase
   }
 
   [HttpPost]
-  public async Task<IActionResult> Create(PetDto pet)
+  public async Task<ActionResult<PetDTO>> Add(PetDTO pet)
   {
     try
     {
       if (ModelState.IsValid)
       {
-        Sitter? sitter = await _sitterRepository.GetById(pet.SitterId);
+        await _petsService.Add(pet);
 
-        if (sitter is null) return NotFound("Sitter not found");
-
-        var newPet = new Pet()
-        {
-          Id = pet.Id,
-          Name = pet.Name,
-          Age = pet.Age,
-          Size = pet.Size,
-          Breed = pet.Breed,
-          IsLost = pet.IsLost,
-          SitterId = pet.SitterId,
-        };
-
-        await _petRepository.Add(newPet);
-        return CreatedAtRoute(nameof(GetPetById), new { id = pet.Id }, pet);
+        return CreatedAtRoute(nameof(GetById), new { id = pet.Id }, pet);
       }
 
       return BadRequest();
@@ -71,7 +52,7 @@ public class PetsController : ControllerBase
     {
       return this.StatusCode(
         StatusCodes.Status500InternalServerError,
-        $"Failed to Create: {err.Message}");
+        $"Failed to Get by Id: {err.Message}");
     }
   }
 }

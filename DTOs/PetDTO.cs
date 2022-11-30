@@ -2,7 +2,7 @@ using GeoPet.Enums;
 
 namespace GeoPet.DTOs;
 
-public class PetDto
+public class PetDTO
 {
   public int Id { get; set; }
   public string Name { get; set; } = default!;

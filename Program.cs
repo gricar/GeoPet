@@ -1,7 +1,9 @@
+using Microsoft.EntityFrameworkCore;
 using GeoPet.Database.Context;
 using GeoPet.Repository;
-using GeoPet.Repository.Contracts;
-using Microsoft.EntityFrameworkCore;
+using GeoPet.Repository.Interfaces;
+using GeoPet.Services;
+using GeoPet.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,9 +11,17 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddScoped<ISittersService, SittersService>();
+builder.Services.AddScoped<IPetsService, PetsService>();
+
 builder.Services.AddScoped<ISitterRepository, SitterRepository>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();
+
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
