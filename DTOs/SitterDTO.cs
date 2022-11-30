@@ -1,8 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace GeoPet.Models;
-
-public class Sitter
+namespace GeoPet.DTOs;
+public class SitterDTO
 {
   public int Id { get; set; }
 
@@ -15,8 +14,4 @@ public class Sitter
 
   [Required]
   public string Password { get; set; } = default!;
-
-  public List<Pet>? Pets { get; set; }
-
-  public Address Address { get; set; } = default!;
 }

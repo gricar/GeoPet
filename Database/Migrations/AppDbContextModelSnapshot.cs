@@ -42,6 +42,9 @@ namespace GeoPet.Database.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SitterId")
+                        .HasColumnType("int");
+
                     b.Property<string>("State")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -51,6 +54,9 @@ namespace GeoPet.Database.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SitterId")
+                        .IsUnique();
 
                     b.ToTable("Addresses");
                 });
@@ -97,9 +103,6 @@ namespace GeoPet.Database.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -114,9 +117,18 @@ namespace GeoPet.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
-
                     b.ToTable("Sitters");
+                });
+
+            modelBuilder.Entity("GeoPet.Models.Address", b =>
+                {
+                    b.HasOne("GeoPet.Models.Sitter", "Sitter")
+                        .WithOne("Address")
+                        .HasForeignKey("GeoPet.Models.Address", "SitterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Sitter");
                 });
 
             modelBuilder.Entity("GeoPet.Models.Pet", b =>
@@ -132,17 +144,9 @@ namespace GeoPet.Database.Migrations
 
             modelBuilder.Entity("GeoPet.Models.Sitter", b =>
                 {
-                    b.HasOne("GeoPet.Models.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.Navigation("Address")
                         .IsRequired();
 
-                    b.Navigation("Address");
-                });
-
-            modelBuilder.Entity("GeoPet.Models.Sitter", b =>
-                {
                     b.Navigation("Pets");
                 });
 #pragma warning restore 612, 618

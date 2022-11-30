@@ -1,3 +1,4 @@
+using GeoPet.DTOs;
 using GeoPet.Models;
 using GeoPet.Repository.Contracts;
 using Microsoft.AspNetCore.Mvc;
@@ -16,13 +17,13 @@ public class SittersController : ControllerBase
   }
 
   [HttpGet("{id:int}", Name = "GetById")]
-  public async Task<IActionResult> GetById(int id)
+  public async Task<ActionResult<Sitter>> GetById(int id)
   {
     try
     {
       Sitter? sitter = await _sitterRepository.GetById(id);
 
-      if (sitter is null) return NotFound();
+      if (sitter is null) return NotFound("Sitter not found");
 
       return Ok(sitter);
     }
@@ -35,14 +36,22 @@ public class SittersController : ControllerBase
   }
 
   [HttpPost]
-  public async Task<IActionResult> Create(Sitter sitter)
+  public async Task<ActionResult<Sitter>> Create(SitterDTO sitterRequest)
   {
     try
     {
       if (ModelState.IsValid)
       {
+        Sitter sitter = new()
+        {
+          Id = sitterRequest.Id,
+          Name = sitterRequest.Name,
+          Email = sitterRequest.Email,
+          Password = sitterRequest.Password
+        };
+
         await _sitterRepository.Add(sitter);
-        return CreatedAtRoute(nameof(GetById), new { id = sitter.Id }, sitter);
+        return CreatedAtRoute(nameof(GetById), new { id = sitter.Id }, sitterRequest);
       }
 
       return BadRequest();
@@ -56,11 +65,11 @@ public class SittersController : ControllerBase
   }
 
   [HttpPut("{id:int}")]
-  public async Task<IActionResult> Update(int id, Sitter sitter)
+  public async Task<IActionResult> Update(int id, SitterDTO sitterRequest)
   {
     try
     {
-      if (id != sitter.Id)
+      if (id != sitterRequest.Id)
       {
         return BadRequest($"Sitter id conflict");
       }
@@ -71,6 +80,14 @@ public class SittersController : ControllerBase
 
       if (ModelState.IsValid)
       {
+        Sitter sitter = new()
+        {
+          Id = sitterRequest.Id,
+          Name = sitterRequest.Name,
+          Email = sitterRequest.Email,
+          Password = sitterRequest.Password
+        };
+
         await _sitterRepository.Update(sitter);
         return Ok($"Sitter id {id} succesfully updated");
       }

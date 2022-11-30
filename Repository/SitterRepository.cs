@@ -16,7 +16,10 @@ public class SitterRepository : ISitterRepository
 
   public async Task<Sitter?> GetById(int id)
   {
-    return await _context.Sitters.AsNoTracking().FirstOrDefaultAsync(s => s.Id == id);
+    return await _context.Sitters
+            .AsNoTracking()
+            .Include(s => s.Pets)
+            .FirstOrDefaultAsync(s => s.Id == id);
   }
 
   public async Task Add(Sitter sitter)

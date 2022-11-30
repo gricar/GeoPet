@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace GeoPet.Models;
 
@@ -21,4 +22,8 @@ public class Address
 
   [Required]
   public string Street { get; set; } = null!;
+
+  public int SitterId { get; set; }
+  [JsonIgnore]
+  public Sitter Sitter { get; set; } = default!;
 }
