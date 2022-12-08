@@ -14,11 +14,13 @@ builder.Services.AddControllers();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddScoped<ISittersService, SittersService>();
+builder.Services.AddScoped<IAddressesService, AddressesService>();
 builder.Services.AddScoped<IPetsService, PetsService>();
+builder.Services.AddScoped<ISittersService, SittersService>();
 
-builder.Services.AddScoped<ISitterRepository, SitterRepository>();
+builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();
+builder.Services.AddScoped<ISitterRepository, SitterRepository>();
 
 builder.Services.AddEndpointsApiExplorer();
 
