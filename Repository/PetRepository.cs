@@ -26,10 +26,10 @@ public class PetRepository : IPetRepository
             .FirstOrDefaultAsync(s => s.Id == id);
   }
 
-  public async Task<int> Add(Pet pet)
+  public async Task Add(Pet pet)
   {
     _context.Pets.Add(pet);
-    return await _context.SaveChangesAsync();
+    await _context.SaveChangesAsync();
   }
 
   public async Task Update(Pet pet)

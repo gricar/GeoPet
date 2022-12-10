@@ -7,7 +7,7 @@ public interface IPetRepository
 {
   Task<IEnumerable<Pet>> GetAll();
   Task<Pet?> GetById(int id);
-  Task<int> Add(Pet pet);
+  Task Add(Pet pet);
   Task Update(Pet pet);
   Task Delete(Pet pet);
 }
