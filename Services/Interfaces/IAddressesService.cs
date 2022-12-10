@@ -5,5 +5,5 @@ namespace GeoPet.Services.Interfaces;
 public interface IAddressesService
 {
   Task<AddressDTO> GetById(int id);
-  Task Add(AddressDTO address);
+  Task<AddressDTO> Add(CreateAddressDTO address);
 }
