@@ -16,6 +16,12 @@ public class PetsService : IPetsService
     _mapper = mapper;
   }
 
+  public async Task<IEnumerable<PetDTO>> GetAll()
+  {
+    var pets = await _petRepository.GetAll(); 
+    
+    return _mapper.Map<IEnumerable<PetDTO>>(pets);
+  }
   public async Task<PetDTO> GetById(int id)
   {
     Pet? pet = await _petRepository.GetById(id);
@@ -32,4 +38,17 @@ public class PetsService : IPetsService
     await _petRepository.Add(pet);
   }
 
+public async Task Update(int id, PetDTO petRequest)
+{
+  var pet = _mapper.Map<Pet>(petRequest);
+
+  await _petRepository.Update(pet);
+}
+
+public async Task Delete(PetDTO petRequest)
+{
+  var pet = _mapper.Map<Pet>(petRequest);
+
+  await _petRepository.Delete(pet);
+}
 }

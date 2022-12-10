@@ -14,6 +14,11 @@ public class PetRepository : IPetRepository
     _context = context;
   }
 
+  public async Task<IEnumerable<Pet>> GetAll()
+  {
+    return await _context.Pets.ToListAsync();
+  }
+
   public async Task<Pet?> GetById(int id)
   {
     return await _context.Pets
@@ -25,5 +30,18 @@ public class PetRepository : IPetRepository
   {
     _context.Pets.Add(pet);
     return await _context.SaveChangesAsync();
+  }
+
+  public async Task Update(Pet pet)
+  {
+    _context.Pets.Update(pet);
+    await _context.SaveChangesAsync();
+  }
+
+  public async Task Delete(Pet pet)
+  {
+      _context.Pets.Remove(pet);
+      await _context.SaveChangesAsync();
+  
   }
 }
