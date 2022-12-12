@@ -42,7 +42,7 @@ public class PetsController : ControllerBase
   }
 
   [HttpPost]
-  public async Task<ActionResult<PetDTO>> Add(PetDTO pet)
+  public async Task<ActionResult<PetDTO>> Add(CreatePetDTO pet)
   {
     try
     {
@@ -64,15 +64,15 @@ public class PetsController : ControllerBase
   }
 
   [HttpPut("{id:int}")]
-  public async Task<ActionResult<PetDTO>> Update(int id, PetDTO pet)
+  public async Task<ActionResult<PetDTO>> Update(int id, CreatePetDTO pet)
   {
     try
     {
-      var petById = await GetById(id);
+      PetDTO petById = await _petsService.GetById(id);
 
       if (petById is null) return NotFound("Pet not found");
 
-      await _petsService.Update(id, pet);
+      await _petsService.Update(pet);
 
       return Ok($"Pet id {id} succesfully updated");
     }
@@ -85,13 +85,13 @@ public class PetsController : ControllerBase
   }
 
   [HttpDelete("{id:int}")]
-  public async Task<ActionResult<PetDTO>> Delete(int id, PetDTO pet)
+  public async Task<ActionResult<PetDTO>> Delete(int id)
   {
     try
     {
-      var petById = await GetById(id);
+      PetDTO pet = await _petsService.GetById(id);
 
-      if (petById is null) return NotFound("Pet not found");
+      if (pet is null) return NotFound("Pet not found");
 
       await _petsService.Delete(pet);
 
