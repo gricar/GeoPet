@@ -6,7 +6,7 @@ public interface IAddressesService
 {
   Task<IEnumerable<AddressDTO>> GetAll();
   Task<AddressDTO> GetById(int id);
-  Task Add(AddressDTO address);
+  Task<AddressDTO> Add(CreateAddressDTO address);
   Task Update(int id, AddressDTO address);
   Task Delete(AddressDTO address);
 }

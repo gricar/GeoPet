@@ -4,6 +4,8 @@ using GeoPet.Repository;
 using GeoPet.Repository.Interfaces;
 using GeoPet.Services;
 using GeoPet.Services.Interfaces;
+using GeoPet.Rest.Interfaces;
+using GeoPet.Rest;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,13 +14,18 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddControllers();
 
+builder.Services.AddHttpClient<IAddressesService, AddressesService>();
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddScoped<ISittersService, SittersService>();
+builder.Services.AddScoped<IAddressesService, AddressesService>();
 builder.Services.AddScoped<IPetsService, PetsService>();
+builder.Services.AddScoped<ISittersService, SittersService>();
+builder.Services.AddScoped<IViaCepRest, ViaCepRest>();
 
-builder.Services.AddScoped<ISitterRepository, SitterRepository>();
+builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();
+builder.Services.AddScoped<ISitterRepository, SitterRepository>();
 
 builder.Services.AddEndpointsApiExplorer();
 
