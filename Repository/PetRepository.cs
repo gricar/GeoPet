@@ -23,7 +23,8 @@ public class PetRepository : IPetRepository
   {
     return await _context.Pets
             .AsNoTracking()
-            .FirstOrDefaultAsync(s => s.Id == id);
+            .Include(p => p.Sitter)
+            .FirstOrDefaultAsync(p => p.Id == id);
   }
 
   public async Task Add(Pet pet)
@@ -40,8 +41,8 @@ public class PetRepository : IPetRepository
 
   public async Task Delete(Pet pet)
   {
-      _context.Pets.Remove(pet);
-      await _context.SaveChangesAsync();
-  
+    _context.Pets.Remove(pet);
+    await _context.SaveChangesAsync();
+
   }
 }
