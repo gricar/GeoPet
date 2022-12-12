@@ -9,4 +9,5 @@ public interface IPetsService
   Task Add(CreatePetDTO pet);
   Task Update(CreatePetDTO pet);
   Task Delete(PetDTO pet);
+  string CreateQrCode(PetDTO pet);
 }

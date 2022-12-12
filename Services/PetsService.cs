@@ -2,7 +2,9 @@ using AutoMapper;
 using GeoPet.DTOs;
 using GeoPet.Models;
 using GeoPet.Repository.Interfaces;
+using GeoPet.Rest;
 using GeoPet.Services.Interfaces;
+using System.Text.Json;
 
 namespace GeoPet.Services;
 public class PetsService : IPetsService
@@ -22,6 +24,7 @@ public class PetsService : IPetsService
 
     return _mapper.Map<IEnumerable<PetDTO>>(pets);
   }
+  
   public async Task<PetDTO> GetById(int id)
   {
     Pet? pet = await _petRepository.GetById(id);
@@ -51,4 +54,14 @@ public class PetsService : IPetsService
 
     await _petRepository.Delete(pet);
   }
+
+  public string CreateQrCode(PetDTO pet)
+  {
+    string petInfo = JsonSerializer.Serialize(pet);
+
+    string petQrCode = QrCodeGenerator.GenerateByteArray(petInfo);
+
+    return petQrCode;
+  }
+
 }
