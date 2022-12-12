@@ -20,7 +20,14 @@ public class AddressesService : IAddressesService
     _viaCepApi = viaCepApi;
     _mapper = mapper;
   }
-
+  
+  public async Task<IEnumerable<AddressDTO>> GetAll()
+  {
+    var addresses = await _addressRepository.GetAll(); 
+    
+    return _mapper.Map<IEnumerable<AddressDTO>>(addresses);
+  }
+  
   public async Task<AddressDTO> GetById(int id)
   {
     Address? address = await _addressRepository.GetById(id);
@@ -29,8 +36,8 @@ public class AddressesService : IAddressesService
 
     return _mapper.Map<AddressDTO>(address);
   }
-
-  public async Task<AddressDTO> Add(CreateAddressDTO addressRequest)
+  
+    public async Task<AddressDTO> Add(CreateAddressDTO addressRequest)
   {
     var cepIsValid = await _viaCepApi.FindCep(addressRequest.Cep);
 
@@ -48,4 +55,17 @@ public class AddressesService : IAddressesService
     return _mapper.Map<AddressDTO>(address);
   }
 
+  public async Task Update(int id, AddressDTO addressRequest)
+  {
+    var address = _mapper.Map<Address>(addressRequest);
+
+    await _addressRepository.Update(address);
+  }
+
+  public async Task Delete(AddressDTO addressRequest)
+  {
+    var address = _mapper.Map<Address>(addressRequest);
+
+    await _addressRepository.Delete(address);
+  }
 }
