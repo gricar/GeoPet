@@ -35,24 +35,30 @@ public class AddressesController : ControllerBase
   }
 
   [HttpPost]
-  public async Task<ActionResult<AddressDTO>> Add(AddressDTO address)
+  public async Task<ActionResult<AddressDTO>> Add(CreateAddressDTO address)
   {
     try
     {
       if (ModelState.IsValid)
       {
-        await _addressesService.Add(address);
+        AddressDTO newAddress = await _addressesService.Add(address);
 
-        return CreatedAtRoute(nameof(GetAddressById), new { id = address.Id }, address);
+        return CreatedAtRoute(nameof(GetAddressById), new { id = newAddress.Id }, newAddress);
       }
 
       return BadRequest();
+    }
+    catch (ArgumentException err)
+    {
+      return this.StatusCode(
+        StatusCodes.Status400BadRequest,
+        $"Failed to register CEP: {err.Message}");
     }
     catch (Exception err)
     {
       return this.StatusCode(
         StatusCodes.Status500InternalServerError,
-        $"Failed to Get by Id: {err.Message}");
+        $"Failed to register address: {err.Message}");
     }
   }
 }
