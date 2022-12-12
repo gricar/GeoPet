@@ -84,6 +84,7 @@ public class PetsController : ControllerBase
     }
   }
 
+  [HttpDelete("{id:int}")]
   public async Task<ActionResult<PetDTO>> Delete(int id, PetDTO pet)
   {
     try
