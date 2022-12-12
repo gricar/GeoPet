@@ -6,7 +6,7 @@ namespace GeoPet.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PetsController : ControllerBase
+public class PetsController : Controller
 {
   private readonly IPetsService _petsService;
 
@@ -54,5 +54,21 @@ public class PetsController : ControllerBase
         StatusCodes.Status500InternalServerError,
         $"Failed to Get by Id: {err.Message}");
     }
+  }
+
+  [HttpGet]
+  [Route("qrcode/{id}")]
+  public async Task<IActionResult> QrCode(int id)
+  {
+    PetDTO pet = await _petsService.GetById(id);
+
+    if (pet is null) return NotFound("Pet not found");
+
+    string petQrCode = _petsService.CreateQrCode(pet);
+
+    ViewBag.QrCodeImage = petQrCode;
+    ViewBag.PetName = pet.Name;
+
+    return View();
   }
 }
