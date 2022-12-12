@@ -6,13 +6,17 @@ using GeoPet.Services;
 using GeoPet.Services.Interfaces;
 using GeoPet.Rest.Interfaces;
 using GeoPet.Rest;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddJsonOptions(x =>
+{
+  x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 builder.Services.AddHttpClient<IAddressesService, AddressesService>();
 

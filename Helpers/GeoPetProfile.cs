@@ -10,6 +10,7 @@ public class GeoPetProfile : Profile
   {
     CreateMap<Address, AddressDTO>().ReverseMap();
     CreateMap<Pet, PetDTO>().ReverseMap();
+    CreateMap<Pet, CreatePetDTO>().ReverseMap();
     CreateMap<Sitter, SitterDTO>().ReverseMap();
   }
 }
