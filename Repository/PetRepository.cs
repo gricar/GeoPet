@@ -16,7 +16,9 @@ public class PetRepository : IPetRepository
 
   public async Task<IEnumerable<Pet>> GetAll()
   {
-    return await _context.Pets.ToListAsync();
+    return await _context.Pets
+            .Include(p => p.Sitter)
+            .ToListAsync();
   }
 
   public async Task<Pet?> GetById(int id)
