@@ -1,0 +1,10 @@
+<div class="container">
+    <div class="row">
+        @if (ViewBag.QrCodeImage != null)
+        {
+            <h3>QR Code do(a) @ViewBag.PetName</h3>
+            <p>Escanei o código abaixo que contém mais informações sobre seu cachorro</p>
+            <img src="@ViewBag.QrCodeImage" alt="QR Code" style="height:300px; width:300px" />
+        }
+    </div>
+</div>
