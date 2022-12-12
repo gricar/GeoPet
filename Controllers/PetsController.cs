@@ -14,9 +14,16 @@ public class PetsController : Controller
   {
     _petsService = petsService;
   }
+  [HttpGet]
+  public async Task<IActionResult> GetAll()
+  {
+    var pets = await _petsService.GetAll();
+    return Ok(pets);
+  }
+
 
   [HttpGet("{id:int}", Name = "GetById")]
-  public async Task<ActionResult<PetDTO>> GetById(int id)
+  public async Task<IActionResult> GetById(int id)
   {
     try
     {
@@ -56,6 +63,47 @@ public class PetsController : Controller
     }
   }
 
+  [HttpPut("{id:int}")]
+  public async Task<ActionResult<PetDTO>> Update(int id, PetDTO pet)
+  {
+    try
+    {
+      var petById = await GetById(id);
+
+      if (petById is null) return NotFound("Pet not found");
+
+      await _petsService.Update(id, pet);
+
+      return Ok($"Pet id {id} succesfully updated");
+    }
+    catch (Exception err)
+    {
+      return this.StatusCode(
+        StatusCodes.Status500InternalServerError,
+        $"Failed to Get by Id: {err.Message}");
+    }
+  }
+
+  public async Task<ActionResult<PetDTO>> Delete(int id, PetDTO pet)
+  {
+    try
+    {
+      var petById = await GetById(id);
+
+      if (petById is null) return NotFound("Pet not found");
+
+      await _petsService.Delete(pet);
+
+      return Ok($"Pet id {id} succesfully deleted");
+    }
+    catch (Exception err)
+    {
+      return this.StatusCode(
+        StatusCodes.Status500InternalServerError,
+        $"Failed to Get by Id: {err.Message}");
+    }
+  }
+  
   [HttpGet]
   [Route("qrcode/{id}")]
   public async Task<IActionResult> QrCode(int id)
