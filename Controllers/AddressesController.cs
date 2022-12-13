@@ -1,11 +1,13 @@
 using GeoPet.DTOs;
 using GeoPet.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GeoPet.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class AddressesController : ControllerBase
 {
   private readonly IAddressesService _addressesService;
@@ -16,6 +18,7 @@ public class AddressesController : ControllerBase
   }
 
   [HttpGet("{id:int}", Name = "GetAddressById")]
+  [AllowAnonymous]
   public async Task<ActionResult<AddressDTO>> GetAddressById(int id)
   {
     try
