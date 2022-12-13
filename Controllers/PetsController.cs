@@ -120,4 +120,34 @@ public class PetsController : Controller
         $"Failed to Get by Id: {err.Message}");
     }
   }
+
+  [HttpPost]
+  [Route("{id}/location")]
+  public async Task<IActionResult> TrackWalk(int id, CoordinatesDTO coordinates)
+  {
+    try
+    {
+      PetDTO pet = await _petsService.GetById(id);
+
+      if (pet is null) return NotFound("Pet not found");
+
+      var location = await _petsService.TrackWalk(coordinates);
+
+      string msg = $"Your pet is located at {location.Address.Street}, in the city of {location.Address.City} - {location.Address.State}";
+
+      return Ok(msg);
+    }
+    catch (ArgumentException err)
+    {
+      return this.StatusCode(
+        StatusCodes.Status400BadRequest,
+        $"Failed to track pet walk: {err.Message}");
+    }
+    catch (Exception err)
+    {
+      return this.StatusCode(
+        StatusCodes.Status500InternalServerError,
+        $"Error: {err.Message}");
+    }
+  }
 }
