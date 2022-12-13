@@ -10,4 +10,5 @@ public interface IPetsService
   Task Update(CreatePetDTO pet);
   Task Delete(PetDTO pet);
   string CreateQrCode(PetDTO pet);
+  Task<AddressLocationDTO> TrackWalk(CoordinatesDTO coordinates);
 }
