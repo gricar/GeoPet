@@ -12,5 +12,6 @@ public class GeoPetProfile : Profile
     CreateMap<Pet, PetDTO>().ReverseMap();
     CreateMap<Pet, CreatePetDTO>().ReverseMap();
     CreateMap<Sitter, SitterDTO>().ReverseMap();
+    CreateMap<Sitter, LoginDTO>().ReverseMap();
   }
 }
