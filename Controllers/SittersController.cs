@@ -1,11 +1,13 @@
 using GeoPet.DTOs;
 using GeoPet.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GeoPet.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class SittersController : ControllerBase
 {
   private readonly ISittersService _sittersService;
