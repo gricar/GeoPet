@@ -41,6 +41,22 @@ public class PetsController : Controller
     }
   }
 
+  [HttpGet]
+  [Route("{id}/qrcode")]
+  public async Task<IActionResult> QrCode(int id)
+  {
+    PetDTO pet = await _petsService.GetById(id);
+
+    if (pet is null) return NotFound("Pet not found");
+
+    string petQrCode = _petsService.CreateQrCode(pet);
+
+    ViewBag.QrCodeImage = petQrCode;
+    ViewBag.PetName = pet.Name;
+
+    return View();
+  }
+
   [HttpPost]
   public async Task<ActionResult<PetDTO>> Add(CreatePetDTO pet)
   {
@@ -103,21 +119,5 @@ public class PetsController : Controller
         StatusCodes.Status500InternalServerError,
         $"Failed to Get by Id: {err.Message}");
     }
-  }
-  
-  [HttpGet]
-  [Route("qrcode/{id}")]
-  public async Task<IActionResult> QrCode(int id)
-  {
-    PetDTO pet = await _petsService.GetById(id);
-
-    if (pet is null) return NotFound("Pet not found");
-
-    string petQrCode = _petsService.CreateQrCode(pet);
-
-    ViewBag.QrCodeImage = petQrCode;
-    ViewBag.PetName = pet.Name;
-
-    return View();
   }
 }
