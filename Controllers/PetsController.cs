@@ -41,6 +41,22 @@ public class PetsController : Controller
     }
   }
 
+  [HttpGet]
+  [Route("{id}/qrcode")]
+  public async Task<IActionResult> QrCode(int id)
+  {
+    PetDTO pet = await _petsService.GetById(id);
+
+    if (pet is null) return NotFound("Pet not found");
+
+    string petQrCode = _petsService.CreateQrCode(pet);
+
+    ViewBag.QrCodeImage = petQrCode;
+    ViewBag.PetName = pet.Name;
+
+    return View();
+  }
+
   [HttpPost]
   public async Task<ActionResult<PetDTO>> Add(CreatePetDTO pet)
   {
@@ -104,20 +120,34 @@ public class PetsController : Controller
         $"Failed to Get by Id: {err.Message}");
     }
   }
-  
-  [HttpGet]
-  [Route("qrcode/{id}")]
-  public async Task<IActionResult> QrCode(int id)
+
+  [HttpPost]
+  [Route("{id}/location")]
+  public async Task<IActionResult> TrackWalk(int id, CoordinatesDTO coordinates)
   {
-    PetDTO pet = await _petsService.GetById(id);
+    try
+    {
+      PetDTO pet = await _petsService.GetById(id);
 
-    if (pet is null) return NotFound("Pet not found");
+      if (pet is null) return NotFound("Pet not found");
 
-    string petQrCode = _petsService.CreateQrCode(pet);
+      var location = await _petsService.TrackWalk(coordinates);
 
-    ViewBag.QrCodeImage = petQrCode;
-    ViewBag.PetName = pet.Name;
+      string msg = $"Your pet is located at {location.Address.Street}, in the city of {location.Address.City} - {location.Address.State}";
 
-    return View();
+      return Ok(msg);
+    }
+    catch (ArgumentException err)
+    {
+      return this.StatusCode(
+        StatusCodes.Status400BadRequest,
+        $"Failed to track pet walk: {err.Message}");
+    }
+    catch (Exception err)
+    {
+      return this.StatusCode(
+        StatusCodes.Status500InternalServerError,
+        $"Error: {err.Message}");
+    }
   }
 }
