@@ -19,13 +19,16 @@ builder.Services.AddControllersWithViews().AddJsonOptions(x =>
 });
 
 builder.Services.AddHttpClient<IAddressesService, AddressesService>();
+builder.Services.AddHttpClient<IPetsService, PetsService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<IAddressesService, AddressesService>();
 builder.Services.AddScoped<IPetsService, PetsService>();
 builder.Services.AddScoped<ISittersService, SittersService>();
+
 builder.Services.AddScoped<IViaCepRest, ViaCepRest>();
+builder.Services.AddScoped<INominatinRest, NominatinRest>();
 
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 builder.Services.AddScoped<IPetRepository, PetRepository>();
