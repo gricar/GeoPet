@@ -1,11 +1,13 @@
 using GeoPet.DTOs;
 using GeoPet.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GeoPet.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class PetsController : Controller
 {
   private readonly IPetsService _petsService;
@@ -15,12 +17,12 @@ public class PetsController : Controller
     _petsService = petsService;
   }
   [HttpGet]
+  [AllowAnonymous]
   public async Task<IActionResult> GetAll()
   {
     var pets = await _petsService.GetAll();
     return Ok(pets);
   }
-
 
   [HttpGet("{id:int}", Name = "GetById")]
   public async Task<IActionResult> GetById(int id)

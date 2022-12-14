@@ -14,6 +14,12 @@ public class SitterRepository : ISitterRepository
     _context = context;
   }
 
+  public async Task<Sitter?> GetByEmailAndPwd(Sitter sitter)
+  {
+    return await _context.Sitters
+            .FirstOrDefaultAsync(s => s.Email == sitter.Email && s.Password == sitter.Password);
+  }
+
   public async Task<Sitter?> GetById(int id)
   {
     return await _context.Sitters
