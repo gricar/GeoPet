@@ -37,14 +37,15 @@ public class SittersController : ControllerBase
   }
 
   [HttpPost]
-  public async Task<ActionResult<SitterDTO>> Create(SitterDTO sitter)
+  [AllowAnonymous]
+  public async Task<ActionResult<NewSitterDTO>> Create(CreateSitterDTO sitter)
   {
     try
     {
       if (ModelState.IsValid)
       {
-        await _sittersService.Add(sitter);
-        return CreatedAtRoute(nameof(GetSitterById), new { id = sitter.Id }, sitter);
+        NewSitterDTO newSitter = await _sittersService.Add(sitter);
+        return CreatedAtRoute(nameof(GetSitterById), new { id = newSitter.Id }, newSitter);
       }
 
       return BadRequest();
@@ -73,7 +74,7 @@ public class SittersController : ControllerBase
 
       if (ModelState.IsValid)
       {
-        await _sittersService.Update(id, sitter);
+        await _sittersService.Update(sitter);
         return Ok($"Sitter id {id} succesfully updated");
       }
 
