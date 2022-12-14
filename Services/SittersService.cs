@@ -27,14 +27,16 @@ public class SittersService : ISittersService
     return _mapper.Map<SitterDTO>(sitter);
   }
 
-  public async Task Add(SitterDTO sitterRequest)
+  public async Task<NewSitterDTO> Add(CreateSitterDTO sitterRequest)
   {
     Sitter sitter = _mapper.Map<Sitter>(sitterRequest);
 
     await _sitterRepository.Add(sitter);
+
+    return _mapper.Map<NewSitterDTO>(sitter);
   }
 
-  public async Task Update(int id, SitterDTO sitterRequest)
+  public async Task Update(SitterDTO sitterRequest)
   {
     Sitter sitter = _mapper.Map<Sitter>(sitterRequest);
 
